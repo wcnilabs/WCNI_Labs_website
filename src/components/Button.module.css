@@ -1,0 +1,92 @@
+.button {
+  display: inline-flex;
+  text-decoration: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.9em;
+  min-height: 3rem;
+  padding: 0.75rem 1.25rem;
+  font-size: var(--fs-body);
+  font-weight: var(--weight-strong);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  white-space: nowrap;
+  border: var(--rule-w) solid transparent;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition:
+    background-color var(--dur) var(--ease),
+    border-color var(--dur) var(--ease),
+    color var(--dur) var(--ease),
+    text-decoration-color var(--dur) var(--ease);
+}
+
+.button:disabled,
+.button[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+/* Solid block, inverted against the section tone */
+.primary {
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+}
+
+.primary:hover:not(:disabled) {
+  background: var(--btn-bg-hover);
+}
+
+/* Thin outline */
+.secondary {
+  background: transparent;
+  color: var(--fg);
+  border-color: var(--rule-strong);
+}
+
+.secondary:hover:not(:disabled) {
+  border-color: var(--fg);
+}
+
+/* Quiet underlined link that still has a 44px touch target */
+.text {
+  min-height: 2.75rem;
+  padding: 0;
+  font-weight: var(--weight-regular);
+  color: var(--fg);
+}
+
+/* Underline the words only, not the arrow */
+.text > span:first-child {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+  text-decoration-color: var(--rule-strong);
+  transition: text-decoration-color var(--dur) var(--ease);
+}
+
+.text:hover > span:first-child {
+  text-decoration-color: var(--fg);
+}
+
+.arrow {
+  display: inline-block;
+  font-weight: var(--weight-regular);
+  transition: transform var(--dur) var(--ease);
+}
+
+.button:hover .arrow,
+.button:focus-visible .arrow {
+  transform: translateX(3px);
+}
+
+.arrow-down:hover .arrow,
+.arrow-down:focus-visible .arrow {
+  transform: translateY(3px);
+}
+
+.arrow-out:hover .arrow,
+.arrow-out:focus-visible .arrow {
+  transform: translate(2px, -2px);
+}

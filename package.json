@@ -1,0 +1,31 @@
+{
+  "name": "wcnilabs-site",
+  "version": "1.2.0",
+  "private": true,
+  "description": "The WCNI Labs website. We couldn't name it, so we built it.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "preview": "node scripts/serve-out.mjs",
+    "icons": "node scripts/make-icons.mjs",
+    "placeholders": "node scripts/list-placeholders.mjs",
+    "typecheck": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=20.9"
+  },
+  "dependencies": {
+    "next": "^16.4.5",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "opentype.js": "^2.0.0",
+    "sharp": "^0.35.5",
+    "typescript": "^6.0.3"
+  }
+}

@@ -1,0 +1,122 @@
+.intro {
+  display: grid;
+  gap: var(--stack-l) 4rem;
+}
+
+.text {
+  display: grid;
+  gap: 1rem;
+  max-width: 56ch;
+  color: var(--fg-body);
+}
+
+.facts {
+  display: grid;
+  align-content: start;
+  font-size: var(--fs-small);
+  border-bottom: var(--rule-w) solid var(--rule);
+}
+
+.fact {
+  display: grid;
+  grid-template-columns: minmax(8rem, 1fr) 2fr;
+  gap: 1rem;
+  padding-block: 0.75rem;
+  border-top: var(--rule-w) solid var(--rule);
+}
+
+.fact dt {
+  color: var(--fg-meta);
+}
+
+.links {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.links a {
+  text-decoration-color: var(--rule-strong);
+  transition: text-decoration-color var(--dur) var(--ease);
+}
+
+.links a:hover {
+  text-decoration-color: var(--fg);
+}
+
+.founders {
+  display: grid;
+  gap: var(--stack-l) 2.5rem;
+  margin-top: var(--stack-xl);
+}
+
+.founder {
+  display: grid;
+  grid-template-columns: clamp(6.5rem, 4rem + 8vw, 10rem) minmax(0, 1fr);
+  gap: 1.5rem;
+  padding-top: 1.75rem;
+  border-top: var(--rule-w) solid var(--rule-strong);
+}
+
+.person {
+  display: grid;
+  align-content: start;
+  gap: 0.35rem;
+}
+
+.kicker {
+  font-size: var(--fs-meta);
+  color: var(--fg-meta);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.name {
+  margin-top: 0.25rem;
+  font-size: clamp(1.375rem, 1.1rem + 1.2vw, 2rem);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+}
+
+.role {
+  font-size: var(--fs-small);
+  color: var(--fg-body);
+}
+
+.background {
+  margin-top: 0.75rem;
+  max-width: 44ch;
+  color: var(--fg-body);
+}
+
+@media (max-width: 29.99rem) {
+  .founder {
+    grid-template-columns: 1fr;
+  }
+
+  .photo {
+    width: 9rem;
+  }
+}
+
+@media (min-width: 56rem) {
+  .intro {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  }
+
+  .founders {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Scroll reveal (src/styles/motion.css): founders rise; the crop marks
+   close in on the photo frame (see PhotoFrame.module.css). */
+.founder[data-reveal-state="out"] {
+  opacity: 0;
+  transform: translateY(var(--reveal-shift));
+}
+
+.founder[data-reveal-state="in"] {
+  transition:
+    opacity var(--reveal-dur) var(--ease-out) var(--reveal-delay),
+    transform var(--reveal-dur) var(--ease-out) var(--reveal-delay);
+}

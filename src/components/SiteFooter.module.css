@@ -1,0 +1,86 @@
+.footer {
+  padding-block: var(--stack-xl) clamp(1.5rem, 1rem + 2vw, 2.75rem);
+  border-top: var(--rule-w) solid var(--rule);
+}
+
+.grid {
+  display: grid;
+  gap: var(--stack-l) 2rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.brand {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 0.75rem;
+  justify-items: start;
+}
+
+.logoLink {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  text-decoration: none;
+}
+
+.logo {
+  font-size: 1.75rem;
+}
+
+.slogan {
+  max-width: 30ch;
+  color: var(--fg-body);
+}
+
+.place {
+  font-size: var(--fs-meta);
+  color: var(--fg-meta);
+}
+
+.colTitle {
+  margin-bottom: 0.75rem;
+  font-size: var(--fs-meta);
+  color: var(--fg-meta);
+}
+
+.links {
+  display: grid;
+  gap: 0.15rem;
+  font-size: var(--fs-small);
+}
+
+.links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.25rem;
+  text-decoration-color: var(--rule-strong);
+  transition: text-decoration-color var(--dur) var(--ease);
+}
+
+.links a:hover {
+  text-decoration-color: var(--fg);
+}
+
+.links > li > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5ch;
+  min-height: 2.25rem;
+  color: var(--fg-body);
+}
+
+.bottom {
+  margin-top: var(--stack-xl);
+  padding-top: 1.25rem;
+  border-top: var(--rule-w) solid var(--rule);
+}
+
+@media (min-width: 48rem) {
+  .grid {
+    grid-template-columns: minmax(0, 2fr) repeat(3, minmax(0, 1fr));
+  }
+
+  .brand {
+    grid-column: auto;
+  }
+}

@@ -1,0 +1,16 @@
+.logo {
+  display: inline-block;
+  font-weight: var(--weight-regular);
+  line-height: 1;
+  letter-spacing: var(--tracking-logo);
+  white-space: nowrap;
+  color: var(--fg);
+}
+
+.wcni {
+  font-weight: var(--weight-strong);
+}
+
+.slash {
+  color: var(--signal);
+}

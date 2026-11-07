@@ -1,0 +1,86 @@
+.frame {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  width: 100%;
+  background: rgb(127 127 127 / 0.08);
+}
+
+.img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.05);
+}
+
+/* No photo yet: a blank frame with a thin grey dashed border */
+.empty {
+  position: absolute;
+  inset: 0;
+  border: var(--rule-w) dashed var(--rule-strong);
+}
+
+/* Crop marks: small L shapes just outside each corner */
+.mark {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-color: var(--fg-meta);
+  border-style: solid;
+  border-width: 0;
+}
+
+.mark[data-corner="tl"] {
+  top: -6px;
+  left: -6px;
+  border-top-width: 1px;
+  border-left-width: 1px;
+}
+
+.mark[data-corner="tr"] {
+  top: -6px;
+  right: -6px;
+  border-top-width: 1px;
+  border-right-width: 1px;
+}
+
+.mark[data-corner="bl"] {
+  bottom: -6px;
+  left: -6px;
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+}
+
+.mark[data-corner="br"] {
+  bottom: -6px;
+  right: -6px;
+  border-bottom-width: 1px;
+  border-right-width: 1px;
+}
+
+/* Scroll reveal (src/styles/motion.css): the crop marks close in on the frame */
+[data-reveal-state="out"] .mark {
+  opacity: 0;
+}
+
+[data-reveal-state="out"] .mark[data-corner="tl"] {
+  transform: translate(-10px, -10px);
+}
+
+[data-reveal-state="out"] .mark[data-corner="tr"] {
+  transform: translate(10px, -10px);
+}
+
+[data-reveal-state="out"] .mark[data-corner="bl"] {
+  transform: translate(-10px, 10px);
+}
+
+[data-reveal-state="out"] .mark[data-corner="br"] {
+  transform: translate(10px, 10px);
+}
+
+[data-reveal-state="in"] .mark {
+  transition:
+    opacity 400ms var(--ease-out),
+    transform 900ms var(--ease-out);
+  transition-delay: calc(var(--reveal-delay, 0ms) + 250ms);
+}

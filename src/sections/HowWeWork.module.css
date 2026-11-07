@@ -1,0 +1,295 @@
+/* ==========================================================================
+   How we work.
+   1. Static: every step shown on one ruled line (no JavaScript, reduced motion,
+      print). The first marker is orange: you start here.
+   2. Scroll-linked (StepsTimeline sets data-scrub on .timeline):
+      one bar follows the scroll; a step appears when the bar reaches it.
+   ========================================================================== */
+
+.timeline {
+  position: relative;
+}
+
+.steps {
+  display: grid;
+  row-gap: var(--stack-l);
+}
+
+.step {
+  position: relative;
+  padding-top: 1.75rem;
+}
+
+/* The rule above each step */
+.step::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: var(--rule-w);
+  background: var(--rule-strong);
+}
+
+/* Square marker sitting on the rule */
+.step::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  top: -4px;
+  left: 0;
+  width: 9px;
+  height: 9px;
+  background: var(--fg);
+}
+
+.step:first-child::before {
+  background: var(--signal);
+}
+
+.stepMeta {
+  display: flex;
+  gap: 0.25ch;
+  font-size: var(--fs-meta);
+  color: var(--fg-meta);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.title {
+  margin-top: 1rem;
+  max-width: 20ch;
+  font-size: var(--fs-h3);
+  line-height: 1.25;
+  letter-spacing: var(--tracking-title);
+}
+
+.body {
+  margin-top: 0.75rem;
+  max-width: 40ch;
+  color: var(--fg-body);
+}
+
+/* The progress bar only exists in the scroll-linked version */
+.bar {
+  display: none;
+}
+
+@media (min-width: 40rem) {
+  .steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 2.5rem;
+  }
+}
+
+@media (min-width: 68rem) {
+  /* One continuous rule across all the steps (--steps is set by HowWeWork.tsx) */
+  .steps {
+    grid-template-columns: repeat(var(--steps, 5), minmax(0, 1fr));
+    column-gap: 0;
+  }
+
+  .step {
+    padding-right: 1.5rem;
+  }
+
+  /* Five columns are narrow: one size down keeps ~22 characters a line */
+  .body {
+    font-size: var(--fs-small);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Scroll-linked: shared
+   -------------------------------------------------------------------------- */
+
+.timeline[data-scrub] .step::after {
+  display: none; /* the bar replaces the per-step rules */
+}
+
+.timeline[data-scrub] .bar {
+  display: block;
+  position: absolute;
+  z-index: 0;
+  background: var(--rule-strong);
+  pointer-events: none;
+}
+
+/* The filled part of the bar */
+.fill {
+  position: absolute;
+  inset: 0;
+  background: var(--fg);
+}
+
+/* An orange cursor riding the tip of the bar, like the one in the hero */
+.tip {
+  position: absolute;
+  z-index: 2;
+  width: 7px;
+  height: 13px;
+  background: var(--signal);
+}
+
+.timeline[data-done] .tip {
+  animation: blink 1.1s steps(1, end) 3;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Percentage readout, like an instrument */
+.readout {
+  position: absolute;
+  font-size: var(--fs-meta);
+  line-height: 1;
+  color: var(--fg-meta);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.06em;
+}
+
+/* Markers: hollow until the bar reaches them, then filled with a small pop */
+.timeline[data-scrub] .step::before {
+  background: var(--bg);
+  box-shadow: inset 0 0 0 1px var(--rule-strong);
+}
+
+.timeline[data-scrub] .step[data-active]::before {
+  background: var(--fg);
+  box-shadow: inset 0 0 0 1px var(--fg);
+  animation: pop 420ms var(--ease-pop);
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0.3);
+  }
+}
+
+/* Step text: the "STEP 02/04" line waits dimmed; title and text come and go */
+.timeline[data-scrub] .stepMeta {
+  opacity: 0.45;
+  transition: opacity 300ms var(--ease-out);
+}
+
+.timeline[data-scrub] .title,
+.timeline[data-scrub] .body {
+  opacity: 0;
+  transform: translateY(0.75rem);
+  transition:
+    opacity 450ms var(--ease-out),
+    transform 450ms var(--ease-out);
+}
+
+.timeline[data-scrub] .step[data-active] .stepMeta,
+.timeline[data-scrub] .step[data-active] .title,
+.timeline[data-scrub] .step[data-active] .body {
+  opacity: 1;
+  transform: none;
+}
+
+.timeline[data-scrub] .step[data-active] .body {
+  transition-delay: 80ms;
+}
+
+/* --------------------------------------------------------------------------
+   Scroll-linked, wide screens: the section holds still while the bar fills
+   -------------------------------------------------------------------------- */
+
+.section {
+  --pin-distance: 200vh; /* how much scrolling the five steps take */
+}
+
+/* Tighter spacing while held, so heading and steps fit on a laptop screen */
+.section[data-pin] {
+  --stack-xl: clamp(2rem, 1rem + 2.5vw, 3.5rem);
+}
+
+.section[data-pin] > :global(.container) {
+  position: sticky;
+  top: var(--pin-top, var(--header-h));
+}
+
+/* Extra height to scroll through while the content is held */
+.section[data-pin]::after {
+  content: "";
+  display: block;
+  height: var(--pin-distance);
+}
+
+.timeline[data-scrub="pin"] .bar {
+  inset: 0 0 auto;
+  height: var(--rule-w);
+}
+
+.timeline[data-scrub="pin"] .fill {
+  transform-origin: left center;
+  transform: scaleX(var(--p, 0));
+}
+
+.timeline[data-scrub="pin"] .tip {
+  top: -6px;
+  left: calc(var(--p, 0) * (100% - 7px));
+}
+
+.timeline[data-scrub="pin"] .readout {
+  right: 0;
+  bottom: 0.9rem;
+}
+
+/* --------------------------------------------------------------------------
+   Scroll-linked, phones and tablets: a vertical line next to the steps
+   -------------------------------------------------------------------------- */
+
+.timeline[data-scrub="line"] .steps {
+  grid-template-columns: minmax(0, 1fr);
+  padding-left: 2rem;
+}
+
+.timeline[data-scrub="line"] .step {
+  padding-top: 0;
+}
+
+.timeline[data-scrub="line"] .step::before {
+  top: 6px;
+  left: -2rem;
+}
+
+.timeline[data-scrub="line"] .bar {
+  top: 10px;
+  left: 4px;
+  width: var(--rule-w);
+  height: var(--track, 0);
+}
+
+.timeline[data-scrub="line"] .fill {
+  transform-origin: center top;
+  transform: scaleY(var(--p, 0));
+}
+
+.timeline[data-scrub="line"] .tip {
+  left: -3px;
+  top: calc(var(--p, 0) * 100% - 6px);
+}
+
+.timeline[data-scrub="line"] .readout {
+  display: none;
+}
+
+@media print {
+  .section[data-pin]::after {
+    display: none;
+  }
+
+  .section[data-pin] > :global(.container) {
+    position: static;
+  }
+
+  .timeline[data-scrub] .stepMeta,
+  .timeline[data-scrub] .title,
+  .timeline[data-scrub] .body {
+    opacity: 1;
+    transform: none;
+  }
+}

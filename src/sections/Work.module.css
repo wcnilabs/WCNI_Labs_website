@@ -1,0 +1,96 @@
+/* Key: what "Client work", "Our own" and "Demo" mean */
+.key {
+  display: grid;
+  column-gap: 2.5rem;
+  margin-bottom: var(--stack-l);
+  font-size: var(--fs-small);
+  border-bottom: var(--rule-w) solid var(--rule);
+}
+
+.keyItem {
+  display: grid;
+  align-content: start;
+  grid-template-columns: 12ch 1fr;
+  gap: 1rem;
+  padding-block: 0.6rem;
+  border-top: var(--rule-w) solid var(--rule);
+}
+
+.keyItem dt {
+  font-weight: var(--weight-strong);
+}
+
+.keyItem dd {
+  color: var(--fg-meta);
+}
+
+.grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: clamp(1.25rem, 0.9rem + 1.6vw, 2.25rem);
+  border: var(--rule-w) solid var(--rule-strong);
+  border-radius: var(--radius);
+}
+
+/* The open slot is a dashed box (global .dash-box): the dashes march on hover */
+.slot {
+  border-color: transparent;
+  background-origin: border-box;
+}
+
+.title {
+  margin-top: 0.75rem;
+  max-width: 18ch;
+  font-size: clamp(1.5rem, 1.1rem + 1.7vw, 2.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.summary {
+  max-width: 56ch;
+  color: var(--fg-body);
+}
+
+.facts {
+  display: grid;
+  font-size: var(--fs-small);
+  border-bottom: var(--rule-w) solid var(--rule);
+}
+
+.fact {
+  display: grid;
+  grid-template-columns: 8ch 1fr;
+  gap: 1rem;
+  padding-block: 0.6rem;
+  border-top: var(--rule-w) solid var(--rule);
+}
+
+.fact dt {
+  color: var(--fg-meta);
+}
+
+.link {
+  margin-top: auto;
+  padding-top: 0.5rem;
+}
+
+@media (min-width: 56rem) {
+  .key {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .keyItem {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+
+  .grid {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  }
+}

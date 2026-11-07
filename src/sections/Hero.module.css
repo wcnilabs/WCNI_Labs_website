@@ -1,0 +1,75 @@
+.hero {
+  display: flex;
+  min-height: min(calc(100svh - var(--header-h)), 64rem);
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--stack-xl);
+  padding-block: clamp(1.5rem, 1rem + 2vw, 2.75rem);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--stack-l);
+}
+
+.title {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.25rem, 0.8rem + 2.2vw, 3rem);
+  font-weight: var(--weight-regular);
+}
+
+.logo {
+  font-size: var(--fs-display);
+}
+
+.slogan {
+  max-width: 27ch;
+  font-size: clamp(1.375rem, 0.95rem + 2.2vw, 3.25rem);
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  text-wrap: pretty;
+}
+
+/* The one motion detail on the site: a terminal cursor after the slogan. */
+.cursor {
+  display: inline-block;
+  width: 0.5em;
+  height: 0.95em;
+  margin-left: 0.2em;
+  vertical-align: -0.12em;
+  background: var(--signal);
+  animation: blink 1.1s steps(1, end) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor {
+    animation: none;
+  }
+}
+
+.intro {
+  max-width: 48ch;
+  font-size: var(--fs-lead);
+  line-height: 1.5;
+  color: var(--fg-body);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 2rem;
+}

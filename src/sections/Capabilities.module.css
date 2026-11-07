@@ -1,0 +1,111 @@
+.areas {
+  border-bottom: var(--rule-w) solid var(--rule);
+}
+
+.area {
+  position: relative;
+  display: grid;
+  gap: 1rem 2.5rem;
+  padding-block: var(--stack-m) var(--stack-l);
+}
+
+/* The rule above each area, drawn as an element so it can grow on reveal */
+.area::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: var(--rule-w);
+  background: var(--rule);
+  transform-origin: left center;
+}
+
+.number {
+  font-size: var(--fs-numeral);
+  font-weight: var(--weight-strong);
+  line-height: 0.9;
+  letter-spacing: var(--tracking-display);
+}
+
+.title {
+  max-width: 22ch;
+  font-size: var(--fs-h3);
+  line-height: 1.25;
+  letter-spacing: var(--tracking-title);
+}
+
+.text {
+  display: grid;
+  gap: 1rem;
+}
+
+.body {
+  max-width: 54ch;
+  color: var(--fg-body);
+}
+
+/* "For example" list: plain words split by slashes, in the meta colour */
+.examples {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 54ch;
+  font-size: var(--fs-small);
+  line-height: 1.5;
+  color: var(--fg-meta);
+}
+
+/* The slash ends the item before it, so a wrapped line starts flush */
+.examples li:not(:last-child)::after {
+  content: "/" / "";
+  margin-inline: 0.75ch;
+}
+
+/* "Not sure which you need?" line under the list */
+.note {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1.5rem;
+  margin-top: var(--stack-l);
+  color: var(--fg-body);
+}
+
+@media (min-width: 56rem) {
+  .area {
+    grid-template-columns: minmax(8rem, 2fr) minmax(0, 4fr) minmax(0, 6fr);
+    align-items: start;
+  }
+
+  .title,
+  .text {
+    padding-top: 0.35rem;
+  }
+}
+
+/* Scroll reveal: the rule draws across, then number, title and text rise in turn */
+.area[data-reveal-state="out"]::before {
+  transform: scaleX(0);
+}
+
+.area[data-reveal-state="out"] > * {
+  opacity: 0;
+  transform: translateY(0.75rem);
+}
+
+.area[data-reveal-state="in"]::before {
+  transition: transform 1s var(--ease-out) var(--reveal-delay);
+}
+
+.area[data-reveal-state="in"] > * {
+  transition:
+    opacity var(--reveal-dur) var(--ease-out),
+    transform var(--reveal-dur) var(--ease-out);
+  transition-delay: calc(var(--reveal-delay) + 150ms);
+}
+
+.area[data-reveal-state="in"] > :nth-child(2) {
+  transition-delay: calc(var(--reveal-delay) + 240ms);
+}
+
+.area[data-reveal-state="in"] > :nth-child(3) {
+  transition-delay: calc(var(--reveal-delay) + 330ms);
+}

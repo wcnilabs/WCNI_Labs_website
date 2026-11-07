@@ -1,0 +1,109 @@
+/* ==========================================================================
+   WCNI Labs — design tokens
+   The brand values are fixed (taken from the designs in brand/). Everything else in the
+   site is built from these variables, so a client site can re-skin the
+   whole starter by editing this one file.
+   ========================================================================== */
+
+:root {
+  /* Brand colours — exact values, do not change */
+  --paper: #f2f0eb;
+  --carbon: #111111;
+  --ink-2: #333333;
+  --meta: #5c5c5c;
+  --meta-dark: #a8a8a8;
+  --body-dark: #cfcfcf;
+  --signal: #ff5a1f;
+
+  /* Typography — IBM Plex Mono only (400 + 600). `--font-plex` is set by next/font. */
+  --font-mono: var(--font-plex), ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --weight-regular: 400;
+  --weight-strong: 600;
+
+  --tracking-logo: -0.035em;
+  --tracking-display: -0.04em;
+  --tracking-title: -0.02em;
+  --tracking-label: 0.14em;
+
+  /* Fluid type scale (mobile 360px → desktop 1440px) */
+  --fs-meta: 0.8125rem; /* 13px */
+  --fs-label: 0.875rem; /* 14px */
+  --fs-small: 0.9375rem; /* 15px */
+  --fs-body: clamp(1rem, 0.95rem + 0.2vw, 1.0625rem); /* 16 → 17px */
+  --fs-lead: clamp(1.125rem, 1rem + 0.55vw, 1.5rem); /* 18 → 24px */
+  --fs-h3: clamp(1.1875rem, 1.05rem + 0.55vw, 1.5rem); /* 19 → 24px */
+  --fs-h2: clamp(2.25rem, 1.45rem + 3.6vw, 5rem); /* 36 → 80px */
+  --fs-numeral: clamp(2.75rem, 1.9rem + 3.6vw, 5rem); /* 44 → 80px */
+  --fs-display: clamp(3.5rem, 0.6rem + 12.4vw, 11rem); /* 56 → 176px */
+
+  --lh-tight: 1.05;
+  --lh-snug: 1.3;
+  --lh-body: 1.6;
+
+  /* Space & layout */
+  --gutter: clamp(1.25rem, 0.6rem + 4.2vw, 5.5rem); /* 20 → 88px, the post padding */
+  --section-y: clamp(4.5rem, 2.8rem + 7.5vw, 10rem);
+  --stack-xs: 0.5rem;
+  --stack-s: 1rem;
+  --stack-m: 1.5rem;
+  --stack-l: clamp(2rem, 1.4rem + 2.6vw, 3.5rem);
+  --stack-xl: clamp(3rem, 2rem + 5vw, 6rem);
+  --maxw: 82rem; /* 1312px content width */
+  --measure: 62ch;
+  --header-h: 3.5rem;
+
+  /* Shape */
+  --radius: 2px;
+  --rule-w: 1px;
+
+  /* Motion — state changes */
+  --dur: 140ms;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  /* Motion — scroll reveals (src/styles/motion.css) */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1); /* small overshoot */
+  --reveal-dur: 700ms;
+  --reveal-shift: 1rem;
+  --stagger: 90ms; /* gap between things that arrive together */
+
+  /* Dashed boxes around fields (src/components/Fill) */
+  --dash-period: 6px; /* one dash + one gap */
+}
+
+/* --------------------------------------------------------------------------
+   Tones. Every section sets data-tone="paper" | "carbon" and components
+   only ever read these semantic variables, never the raw brand colours.
+   -------------------------------------------------------------------------- */
+
+:root,
+[data-tone="paper"] {
+  --bg: var(--paper);
+  --fg: var(--carbon);
+  --fg-body: var(--ink-2);
+  --fg-meta: var(--meta);
+  --rule: rgb(92 92 92 / 0.3);
+  --rule-strong: rgb(92 92 92 / 0.75);
+  /* Orange on paper is only 2.7:1, so focus rings are carbon on light sections. */
+  --focus: var(--carbon);
+  --btn-bg: var(--carbon);
+  --btn-bg-hover: var(--ink-2);
+  --btn-fg: var(--paper);
+  --ph-bg: rgb(255 90 31 / 0.08);
+  color-scheme: light;
+}
+
+[data-tone="carbon"] {
+  --bg: var(--carbon);
+  --fg: var(--paper);
+  --fg-body: var(--body-dark);
+  --fg-meta: var(--meta-dark);
+  --rule: rgb(168 168 168 / 0.24);
+  --rule-strong: rgb(168 168 168 / 0.6);
+  --focus: var(--signal);
+  --btn-bg: var(--paper);
+  --btn-bg-hover: #ffffff;
+  --btn-fg: var(--carbon);
+  --ph-bg: rgb(255 90 31 / 0.12);
+  color-scheme: dark;
+}

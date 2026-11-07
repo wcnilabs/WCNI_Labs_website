@@ -1,0 +1,9 @@
+/* The dashes themselves come from the global .dash-box (src/styles/motion.css). */
+
+/* A placeholder not filled in yet: orange dashes and a faint orange tint */
+.todo {
+  --dash: var(--signal);
+  padding: 0.05em 0.25em;
+  border-radius: var(--radius);
+  background-color: var(--ph-bg);
+}

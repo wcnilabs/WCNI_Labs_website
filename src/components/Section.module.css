@@ -1,0 +1,70 @@
+.section {
+  padding-block: clamp(1.5rem, 1rem + 2vw, 2.75rem) var(--section-y);
+  background: var(--bg);
+  color: var(--fg);
+}
+
+/* Two sections of the same tone in a row get a thin rule between them */
+[data-tone="paper"] + .section[data-tone="paper"],
+[data-tone="carbon"] + .section[data-tone="carbon"] {
+  border-top: var(--rule-w) solid var(--rule);
+}
+
+.meta {
+  margin-bottom: var(--stack-xl);
+}
+
+.head {
+  display: grid;
+  gap: var(--stack-m);
+  justify-items: start;
+}
+
+.title {
+  max-width: 17ch;
+  font-size: var(--fs-h2);
+  font-weight: var(--weight-strong);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-display);
+  margin-top: 0.25rem;
+}
+
+.lead {
+  max-width: 44ch;
+  font-size: var(--fs-lead);
+  line-height: 1.4;
+  color: var(--fg-body);
+}
+
+.body {
+  margin-top: var(--stack-xl);
+}
+
+/* Scroll reveal (src/styles/motion.css): the label types itself in,
+   one character at a time, then the headline and the lead rise. */
+.head[data-reveal-state="out"] > * {
+  opacity: 0;
+  transform: translateY(var(--reveal-shift));
+}
+
+.head[data-reveal-state="in"] > * {
+  transition:
+    opacity var(--reveal-dur) var(--ease-out),
+    transform var(--reveal-dur) var(--ease-out);
+  transition-delay: calc(var(--reveal-delay) + 180ms);
+}
+
+.head[data-reveal-state="in"] > :nth-child(3) {
+  transition-delay: calc(var(--reveal-delay) + 300ms);
+}
+
+.head[data-reveal-state="out"] > :first-child {
+  opacity: 1;
+  transform: none;
+  clip-path: inset(0 100% 0 0);
+}
+
+.head[data-reveal-state="in"] > :first-child {
+  clip-path: inset(-0.25em -0.5em -0.25em -0.25em);
+  transition: clip-path calc(var(--chars, 12) * 35ms) steps(var(--chars, 12)) var(--reveal-delay);
+}

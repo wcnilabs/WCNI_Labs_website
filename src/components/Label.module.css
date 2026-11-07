@@ -1,0 +1,16 @@
+.label {
+  display: flex;
+  align-items: baseline;
+  gap: 0.85em;
+  font-size: var(--fs-label);
+  font-weight: var(--weight-strong);
+  line-height: 1.2;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--fg);
+}
+
+.slash {
+  color: var(--signal);
+  letter-spacing: 0;
+}

@@ -1,0 +1,94 @@
+/* ==========================================================================
+   Motion: scroll reveals and the dashed "field" boxes.
+
+   Reveals are driven by src/components/ScrollReveal.tsx, which sets
+   data-reveal-state="out" on marked elements still below the screen and
+   "in" when they arrive. Without JavaScript, or with reduced motion,
+   nothing here applies and everything is simply visible.
+
+   Each element that arrives in a group gets --reveal-k (0, 1, 2…), so
+   --reveal-delay staggers them. A component can set its own --stagger.
+   ========================================================================== */
+
+[data-reveal] {
+  --reveal-delay: calc(var(--reveal-k, 0) * var(--stagger));
+}
+
+/* Generic: fade in and rise a little */
+[data-reveal="up"][data-reveal-state="out"] {
+  opacity: 0;
+  transform: translateY(var(--reveal-shift));
+}
+
+[data-reveal="up"][data-reveal-state="in"] {
+  transition:
+    opacity var(--reveal-dur) var(--ease-out) var(--reveal-delay),
+    transform var(--reveal-dur) var(--ease-out) var(--reveal-delay);
+}
+
+/* Keyboard users never land on something invisible */
+[data-reveal-state="out"]:focus-within,
+[data-reveal-state="out"]:focus-within * {
+  opacity: 1 !important;
+  transform: none !important;
+  clip-path: none !important;
+}
+
+@media print {
+  [data-reveal-state],
+  [data-reveal-state] *,
+  [data-reveal-state]::before,
+  [data-reveal-state]::after,
+  [data-reveal-state] *::before,
+  [data-reveal-state] *::after {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Dashed box. Drawn with gradients instead of a border so the dashes can
+   "march" on hover, like a selection in an editor. Works on inline text
+   that wraps (each line gets its own box).
+   Set --dash to change the colour (grey by default).
+   -------------------------------------------------------------------------- */
+
+.dash-box {
+  background-image:
+    linear-gradient(90deg, var(--dash, var(--rule-strong)) 50%, transparent 0),
+    linear-gradient(90deg, var(--dash, var(--rule-strong)) 50%, transparent 0),
+    linear-gradient(180deg, var(--dash, var(--rule-strong)) 50%, transparent 0),
+    linear-gradient(180deg, var(--dash, var(--rule-strong)) 50%, transparent 0);
+  background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+  background-size:
+    var(--dash-period) 1px,
+    var(--dash-period) 1px,
+    1px var(--dash-period),
+    1px var(--dash-period);
+  background-position:
+    0 0,
+    0 100%,
+    0 0,
+    100% 0;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.dash-box:hover,
+a:hover > .dash-box,
+a:focus-visible > .dash-box {
+  --dash: var(--fg);
+  animation: march 450ms linear infinite;
+}
+
+/* Clockwise: top →, right ↓, bottom ←, left ↑. 6px = --dash-period. */
+@keyframes march {
+  to {
+    background-position:
+      6px 0,
+      -6px 100%,
+      0 -6px,
+      100% 6px;
+  }
+}
