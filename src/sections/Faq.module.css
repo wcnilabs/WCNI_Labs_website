@@ -41,10 +41,13 @@
   letter-spacing: var(--tracking-title);
 }
 
-.summary:hover .question {
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.22em;
+/* Mouse only: on touch screens the underline would stay after a tap */
+@media (hover: hover) {
+  .summary:hover .question {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.22em;
+  }
 }
 
 /* Plus that turns into a minus */
@@ -82,6 +85,38 @@
   max-width: 60ch;
   padding: 0 0 1.5rem calc(4.5ch + 1rem);
   color: var(--fg-body);
+}
+
+/* Opening: the answer fades in and rises a little */
+.item[open] .answer {
+  animation: answer-in 360ms var(--ease-out);
+}
+
+@keyframes answer-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.25rem);
+  }
+}
+
+/* Where supported, the answer also slides open and closed instead of jumping.
+   Elsewhere it simply opens, as before. */
+@supports (interpolate-size: allow-keywords) and selector(::details-content) {
+  .item {
+    interpolate-size: allow-keywords;
+  }
+
+  .item::details-content {
+    block-size: 0;
+    overflow: clip;
+    transition:
+      block-size 360ms var(--ease-out),
+      content-visibility 360ms allow-discrete;
+  }
+
+  .item[open]::details-content {
+    block-size: auto;
+  }
 }
 
 .more {

@@ -23,7 +23,8 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   const t = getDictionary(locale);
-  const analyticsToken = site.cloudflareAnalyticsToken.trim();
+  // Vercel sets VERCEL=1 while building, so local builds and previews never load it.
+  const analytics = site.vercelAnalytics && process.env.VERCEL === "1";
 
   return (
     <html lang={htmlLang[locale]} className={plexMono.variable}>
@@ -37,13 +38,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         </main>
         <SiteFooter t={t} locale={locale} />
         <ScrollReveal />
-        {analyticsToken && (
-          // Cloudflare Web Analytics: cookieless. Only loads when a token is set in site.ts.
-          <Script
-            src="https://static.cloudflareinsights.com/beacon.min.js"
-            data-cf-beacon={JSON.stringify({ token: analyticsToken })}
-            strategy="afterInteractive"
-          />
+        {analytics && (
+          // Vercel Web Analytics: cookieless, served from this site's own domain.
+          <Script src="/_vercel/insights/script.js" strategy="afterInteractive" />
         )}
       </body>
     </html>

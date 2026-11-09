@@ -4,7 +4,7 @@ The website of **WCNI Labs** (We Can't Name It Labs), an independent software st
 
 *We couldn't name it, so we built it.*
 
-A static site: Next.js and React, plain CSS, one typeface (IBM Plex Mono), hosted on Cloudflare Pages. No cookies, no tracking, no third-party requests.
+A static site: Next.js and React, plain CSS, one typeface (IBM Plex Mono), hosted on Vercel. No cookies and no ads; anonymous visit counts (Vercel Web Analytics), and the contact form sends through Web3Forms.
 
 ## What's on it
 
@@ -55,20 +55,20 @@ npm run preview      # serves out/ on http://localhost:4173, like production
 | Founder portraits (640×800, black and white) | `public/founders/` |
 | Colours, type scale, spacing, motion timings | `src/styles/tokens.css` |
 
-Anything written like `[THIS]` is a placeholder: it shows on the page in a dashed orange box until it's filled in. Optional links (GitHub) stay hidden until they have a value. [PLACEHOLDERS.md](PLACEHOLDERS.md) lists what's left.
+Anything written like `[THIS]` is a placeholder: it shows on the page in a dashed orange box until it's filled in. Optional links stay hidden until they have a value. [PLACEHOLDERS.md](PLACEHOLDERS.md) lists what's left.
 
-## Deploy (Cloudflare Pages, free plan)
+## Deploy (Vercel)
 
-1. Cloudflare dashboard → **Workers & Pages → Create → Pages → Connect to Git** → pick this repository.
-2. Build settings:
-   - Framework preset: **None**
-   - Build command: `npm run build`
-   - Build output directory: `out`
-   - Environment variable: `NODE_VERSION` = `24`
-3. Deploy. Every push to `main` redeploys; pull requests get preview URLs.
-4. Custom domain: **Custom domains → Set up a domain**. Then update `url` in `src/content/site.ts` and redeploy.
+1. Vercel dashboard → **Add New → Project** → import `wcnilabs/WCNI_Labs_website` (give the Vercel GitHub app access to the `wcnilabs` organisation if it isn't listed).
+2. Project name: `wcnilabs`, so the address is `https://wcnilabs.vercel.app` (the `url` in `src/content/site.ts`). If Vercel gives a different address, update `url` to match.
+3. Build settings: leave the defaults (Framework preset **Next.js**). The static export in `out/` is picked up automatically.
+4. Deploy. Every push to `main` redeploys; pull requests get preview URLs.
+5. **Analytics → Enable** (Web Analytics). The script is already in builds made on Vercel; it starts counting once enabled.
+6. Later, custom domain: **Settings → Domains → Add**, set the `vercel.app` address to redirect to it, then update `url` in `src/content/site.ts` and redeploy.
 
-`public/_headers` sets security headers, long caching for build assets, and the content type of the social images.
+`vercel.json` sets security headers, long caching for build assets, and the content type of the social images.
+
+Note: Vercel's free Hobby plan is for non-commercial use only. A studio site counts as commercial under their terms, so plan on Pro, or move to a host whose free plan allows it (the site is a plain static export and runs anywhere).
 
 ## Project structure
 
@@ -80,7 +80,7 @@ src/sections/          home page sections
 src/views/             full pages
 src/styles/            tokens, base styles, motion
 src/lib/               small helpers: links, metadata, SEO, social image
-public/                favicons, founder photos, Cloudflare _headers
+public/                favicons, founder photos
 scripts/               icons, placeholder check, local preview server
 brand/                 brand references: logo and first Instagram post (HTML + PNG)
 devlog/                screenshots from the build

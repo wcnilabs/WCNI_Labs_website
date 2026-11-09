@@ -75,11 +75,18 @@
   box-decoration-break: clone;
 }
 
-.dash-box:hover,
-a:hover > .dash-box,
 a:focus-visible > .dash-box {
   --dash: var(--fg);
   animation: march 450ms linear infinite;
+}
+
+/* Only with a mouse: on touch screens a tap would leave the dashes marching */
+@media (hover: hover) {
+  .dash-box:hover,
+  a:hover > .dash-box {
+    --dash: var(--fg);
+    animation: march 450ms linear infinite;
+  }
 }
 
 /* Clockwise: top →, right ↓, bottom ←, left ↑. 6px = --dash-period. */

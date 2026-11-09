@@ -2,6 +2,30 @@
 
 All notable changes to the site. Format: [Keep a Changelog](https://keepachangelog.com/), versions follow the `WCNI/SITE vX.Y` label on the site.
 
+## [Unreleased]
+
+Same look. Moves to Vercel, the form sends for real, and the layout holds up better on phones held sideways and on touch screens.
+
+### Changed
+- **Hosting: Vercel** instead of Cloudflare Pages. Address `https://wcnilabs.vercel.app` until a domain is bought. Headers moved from `public/_headers` to `vercel.json`. Case 001 says "Hosting: Vercel".
+- **Contact form sends through Web3Forms** (`contact.web3formsKey`, replaces the unused `formEndpoint`); without a key it falls back to opening the email app. Visitor's email becomes the reply-to. Honeypot renamed to `botcheck`.
+- **Analytics:** cookieless Vercel Web Analytics, only in builds made on Vercel (`vercelAnalytics` replaces `cloudflareAnalyticsToken`).
+- **Privacy page:** Vercel hosting, anonymous visit counts, and the form service; date 2026-11-09.
+- GitHub links filled in (`wcnilabs`, repo `wcnilabs/WCNI_Labs_website`).
+- `npm run placeholders`: no longer fails on the free host address; prints a note instead. Fixed on Windows (it listed its own pattern file).
+
+### Responsive
+- Hero: the big logo is also capped by the screen height, so a phone held sideways shows the slogan too; tighter spacing on short landscape screens. Unchanged on every other screen.
+- Phone menu scrolls inside itself when it's taller than the screen.
+- Contact: the email address wraps after the "@" on narrow phones instead of mid-word; email and Instagram links have taller touch targets.
+- Hover effects (marching dashes, underlines, arrow nudges, button hover) only on devices with a mouse, so they don't stick after a tap.
+
+### Motion
+- FAQ answers slide open and closed (where the browser supports it) and fade in.
+- Phone menu wipes down from the header and back up; links follow one after another.
+- The form's status message fades in.
+- All of it is off with "Reduce motion", like the rest.
+
 ## [1.2.0] — 2026-11-07
 
 Same look, new story: a software studio, not a web agency. And nothing on the site that we can't say for sure yet.

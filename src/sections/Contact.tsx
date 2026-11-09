@@ -7,6 +7,19 @@ import { ContactForm } from "./ContactForm";
 import type { SectionProps } from "./types";
 import styles from "./Contact.module.css";
 
+/** On narrow phones a long address wraps after the "@", not mid-word. */
+function breakAfterAt(address: string) {
+  const at = address.indexOf("@");
+  if (at < 0) return address;
+  return (
+    <>
+      {address.slice(0, at + 1)}
+      <wbr />
+      {address.slice(at + 1)}
+    </>
+  );
+}
+
 /** Email first, then the form. */
 export function Contact({ t, meta }: SectionProps) {
   const c = t.contact;
@@ -34,9 +47,7 @@ export function Contact({ t, meta }: SectionProps) {
               <dt>{c.channels.emailLabel}</dt>
               <dd>
                 {email ? (
-                  <a href={email}>
-                    <Fill>{site.contact.email}</Fill>
-                  </a>
+                  <a href={email}>{breakAfterAt(site.contact.email)}</a>
                 ) : (
                   <Fill>{site.contact.email}</Fill>
                 )}
@@ -58,7 +69,7 @@ export function Contact({ t, meta }: SectionProps) {
             id="contact-form"
             copy={c.form}
             email={site.contact.email}
-            endpoint={site.contact.formEndpoint}
+            accessKey={site.contact.web3formsKey}
           />
         </div>
       </div>

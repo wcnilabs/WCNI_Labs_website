@@ -10,7 +10,7 @@ How the site is put together, and why.
 | **React 19, server components by default** | Only four components run in the browser: the phone menu, the contact form, the scroll reveal and the How we work timeline. Everything else is HTML. |
 | **Plain CSS + CSS Modules** | Our own CSS, no UI kit, no Tailwind. Global tokens in one file; each component owns a small `.module.css` next to it. |
 | **IBM Plex Mono, self-hosted** | The only typeface, as in the posts. Two weights shipped (400, 600), preloaded, `font-display: swap` with a metric-matched fallback so text doesn't jump when the font arrives. |
-| **Cloudflare Pages** | Free, fast, deploys from Git, serves `out/` as-is. |
+| **Vercel** | Deploys from Git, serves `out/` as-is, preview URL per pull request, built-in cookieless analytics. Headers in `vercel.json`. |
 
 > We also considered Astro and chose React/Next instead, so the trade-off is JavaScript: the Next.js + React runtime is about 170 KB gzipped on the home page, where Astro would ship close to zero. The page still renders fully without JavaScript. If Lighthouse on mobile comes in under 95, the options are in TODO.md.
 
@@ -46,7 +46,7 @@ src/
   lib/                        small helpers: placeholders, links, metadata, SEO, social image
   fonts/                      woff2 files used by the site (+ woff copies for build-time images)
 
-public/                       favicons, _headers (Cloudflare)
+public/                       favicons, founder photos
 scripts/                      make-icons, list-placeholders, serve-out (local preview)
 devlog/                       screenshots for Instagram posts
 brand/                        brand references: logo and first Instagram post (HTML + PNG)
@@ -115,10 +115,10 @@ Remember to add new URLs to `app/sitemap.ts`.
 
 `src/sections/ContactForm.tsx` works with no paid service:
 
-- **Default (no endpoint):** opens the visitor's email app with the message filled in. Nothing is stored or sent by the site. Without JavaScript the browser does a native `mailto:` submission.
-- **With `contact.formEndpoint`:** POSTs JSON and shows success/error. Intended for a Cloudflare Pages Function (see TODO.md); not built yet because sending email needs a service or Email Routing setup, which we haven't chosen yet.
+- **With `contact.web3formsKey`:** sends the message through [Web3Forms](https://web3forms.com) (free plan), which forwards it to the inbox the key was created with, and shows success/error. The visitor's email, when they give one, becomes the reply-to. Without JavaScript the form posts to Web3Forms directly and their confirmation page opens.
+- **Without a key (placeholder):** opens the visitor's email app with the message filled in. Without JavaScript the browser does a native `mailto:` submission.
 
-Includes labels, hints tied with `aria-describedby`, a live status message, and a honeypot field for bots.
+Includes labels, hints tied with `aria-describedby`, a live status message, and a honeypot field (`botcheck`, which Web3Forms also checks).
 
 ## SEO
 
@@ -138,4 +138,4 @@ Includes labels, hints tied with `aria-describedby`, a live status message, and 
 
 ## Privacy
 
-No cookies, no tracking, no third-party requests. Fonts are self-hosted. Analytics are off; `cloudflareAnalyticsToken` in `site.ts` turns on cookieless Cloudflare Web Analytics, and the privacy page must be updated when it does.
+No cookies, no ads. Fonts are self-hosted. Analytics: Vercel Web Analytics (cookieless, anonymous, script served from the site's own domain), added only to builds made on Vercel and switched by `vercelAnalytics` in `site.ts`. The only third party the visitor's data reaches is Web3Forms, and only when they send the form. The privacy page says all of this; update it if any of it changes.

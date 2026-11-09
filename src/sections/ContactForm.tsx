@@ -14,20 +14,25 @@ type ContactFormProps = {
   copy: Copy;
   /** Where messages go in mailto mode. */
   email: string;
-  /** Optional POST endpoint (e.g. a Cloudflare Pages Function). Empty = mailto mode. */
-  endpoint: string;
+  /** Web3Forms access key. A placeholder or empty = mailto mode. */
+  accessKey: string;
 };
 
+const WEB3FORMS_URL = "https://api.web3forms.com/submit";
+const looksLikeEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
 /**
- * Works without any paid service:
- *  - no endpoint configured → opens the visitor's email app with the message filled in;
- *  - endpoint configured    → POSTs JSON to it and shows the result.
- * Without JavaScript the browser falls back to a native mailto: form submission.
+ * Two modes, both free:
+ *  - Web3Forms key set → sends the message through Web3Forms (to the key's inbox)
+ *    and shows the result. Without JavaScript, the browser posts the form to
+ *    Web3Forms directly and their confirmation page opens.
+ *  - no key yet        → opens the visitor's email app with the message filled in
+ *    (a native mailto: form submission without JavaScript).
  */
-export function ContactForm({ id, copy, email, endpoint }: ContactFormProps) {
+export function ContactForm({ id, copy, email, accessKey }: ContactFormProps) {
   const [status, setStatus] = useState<Status>("idle");
   const hasEmail = isFilled(email);
-  const useEndpoint = endpoint.trim() !== "";
+  const useService = isFilled(accessKey);
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -41,7 +46,7 @@ export function ContactForm({ id, copy, email, endpoint }: ContactFormProps) {
     const data = new FormData(form);
     const field = (name: string) => String(data.get(name) ?? "").trim();
     // Honeypot: real people never see or fill this field.
-    if (field("website")) return;
+    if (data.get("botcheck")) return;
 
     const payload = {
       name: field("name"),
@@ -49,16 +54,29 @@ export function ContactForm({ id, copy, email, endpoint }: ContactFormProps) {
       reach: field("reach"),
       message: field("message"),
     };
+    const subject = `${copy.mailSubject}: ${payload.business || payload.name}`;
 
-    if (useEndpoint) {
+    if (useService) {
       setStatus("sending");
       try {
-        const response = await fetch(endpoint, {
+        const response = await fetch(WEB3FORMS_URL, {
           method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify(payload),
+          headers: { "content-type": "application/json", accept: "application/json" },
+          body: JSON.stringify({
+            access_key: accessKey,
+            subject,
+            from_name: "WCNI Labs website",
+            // Reply straight to the visitor when they left an email address.
+            ...(looksLikeEmail(payload.reach) ? { replyto: payload.reach } : {}),
+            // The keys are the labels shown in the email we receive.
+            [copy.name]: payload.name,
+            [copy.business]: payload.business || "—",
+            [copy.reach]: payload.reach,
+            [copy.message]: payload.message,
+          }),
         });
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const result = (await response.json().catch(() => null)) as { success?: boolean } | null;
+        if (!response.ok || !result?.success) throw new Error(`HTTP ${response.status}`);
         form.reset();
         setStatus("sent");
       } catch {
@@ -67,7 +85,6 @@ export function ContactForm({ id, copy, email, endpoint }: ContactFormProps) {
       return;
     }
 
-    const subject = `${copy.mailSubject}: ${payload.business || payload.name}`;
     const body = [
       `${copy.name}: ${payload.name}`,
       `${copy.business}: ${payload.business || "—"}`,
@@ -93,15 +110,23 @@ export function ContactForm({ id, copy, email, endpoint }: ContactFormProps) {
       className={styles.form}
       onSubmit={onSubmit}
       noValidate
-      // No-JS fallback: the browser hands the fields to the email app.
-      action={!useEndpoint && hasEmail ? `mailto:${email}` : undefined}
+      // No-JS fallback: post to Web3Forms, or hand the fields to the email app.
+      action={useService ? WEB3FORMS_URL : hasEmail ? `mailto:${email}` : undefined}
       method="post"
-      encType="text/plain"
+      encType={useService ? undefined : "text/plain"}
       aria-labelledby={`${id}-title`}
     >
       <h3 id={`${id}-title`} className={styles.title}>
         {copy.title}
       </h3>
+
+      {useService && (
+        <>
+          <input type="hidden" name="access_key" value={accessKey} />
+          <input type="hidden" name="subject" value={copy.mailSubject} />
+          <input type="hidden" name="from_name" value="WCNI Labs website" />
+        </>
+      )}
 
       <div className={styles.pair}>
         <div className={styles.field}>
@@ -154,17 +179,18 @@ export function ContactForm({ id, copy, email, endpoint }: ContactFormProps) {
         </p>
       </div>
 
-      {/* Honeypot for bots — hidden from people and assistive tech. */}
+      {/* Honeypot for bots — hidden from people and assistive tech.
+          "botcheck" is the name Web3Forms also checks on its side. */}
       <div className={styles.trap} aria-hidden="true">
-        <label htmlFor={`${id}-website`}>Website</label>
-        <input id={`${id}-website`} name="website" type="text" tabIndex={-1} autoComplete="off" />
+        <label htmlFor={`${id}-botcheck`}>Leave this empty</label>
+        <input id={`${id}-botcheck`} name="botcheck" type="checkbox" tabIndex={-1} autoComplete="off" />
       </div>
 
       <div className={styles.submitRow}>
         <Button type="submit" variant="secondary" arrow="right" disabled={status === "sending"}>
           {status === "sending" ? copy.sending : copy.submit}
         </Button>
-        {!useEndpoint && <p className={styles.note}>{copy.mailtoNote}</p>}
+        {!useService && <p className={styles.note}>{copy.mailtoNote}</p>}
       </div>
 
       <p role="status" aria-live="polite" className={styles.status} data-status={status}>

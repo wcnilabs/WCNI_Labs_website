@@ -1,6 +1,6 @@
 /**
  * Tiny static server for the production build in out/ — the same files
- * Cloudflare Pages serves. Handles /path/ → /path/index.html and the 404 page.
+ * Vercel serves. Handles /path/ → /path/index.html and the 404 page.
  *
  * Run: npm run build && npm run preview   →   http://localhost:4173
  */
@@ -44,7 +44,7 @@ createServer(async (req, res) => {
   const file = await resolveFile(req.url ?? "/");
   const status = file ? 200 : 404;
   const target = file ?? join(root, "404.html");
-  // Next writes the social images without an extension (Cloudflare gets the type from public/_headers).
+  // Next writes the social images without an extension (Vercel gets the type from vercel.json).
   const type = /-image$/.test(target) ? "image/png" : (types[extname(target)] ?? "application/octet-stream");
   res.writeHead(status, { "content-type": type });
   createReadStream(target).pipe(res);

@@ -25,8 +25,21 @@
   font-weight: var(--weight-regular);
 }
 
+/* Capped by the screen height too, so a phone held sideways still shows the slogan.
+   On ordinary screens the width-based size is always the smaller one. */
 .logo {
-  font-size: var(--fs-display);
+  font-size: min(var(--fs-display), 26svh);
+}
+
+/* Short landscape screens (phones sideways): tighter spacing */
+@media (orientation: landscape) and (max-height: 32rem) {
+  .inner {
+    gap: var(--stack-l);
+  }
+
+  .title {
+    gap: 1rem;
+  }
 }
 
 .slogan {

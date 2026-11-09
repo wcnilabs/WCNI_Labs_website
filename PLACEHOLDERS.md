@@ -1,7 +1,7 @@
 # Placeholders
 
 Every personal or business fact the site needs lives in **one file: [`src/content/site.ts`](src/content/site.ts)**.
-Until a value is filled in it is written like `[THIS]`, and the site shows it in a dashed orange box so nothing slips through. Once filled, it is plain text. Optional links (GitHub, the site's repo) are hidden until filled, so none of these appear as boxes on the page.
+Until a value is filled in it is written like `[THIS]`, and the site shows it in a dashed orange box so nothing slips through. Once filled, it is plain text. Optional links are hidden until filled, so none of these appear as boxes on the page.
 
 ```bash
 npm run placeholders   # lists every placeholder still left, with file:line
@@ -15,9 +15,9 @@ Prices, contract terms, timelines, ownership and domain terms were taken off the
 
 | Placeholder | Field in `site.ts` | What to write | Example |
 |---|---|---|---|
-| `[GITHUB HANDLE]` / `[GITHUB URL]` | `social.github` | Studio GitHub account | `wcnilabs` / `https://github.com/wcnilabs` |
-| `[GITHUB REPO URL]` | `repoUrl` | Public repo of this site (case study #1 links to it) | `https://github.com/wcnilabs/website` |
-| `[SITE URL]` | `url` | Real domain once connected (canonical URLs, sitemap, social cards). Currently the Cloudflare default `https://wcnilabs.pages.dev` | `https://wcnilabs.com` |
+| `[WEB3FORMS ACCESS KEY]` | `contact.web3formsKey` | Access key from [web3forms.com](https://web3forms.com), created with the inbox that should receive the messages. Public by design. Until it's set, the form opens the visitor's email app instead. | `a1b2c3d4-…` |
+
+`url` is not a placeholder: it's the free Vercel address `https://wcnilabs.vercel.app` for now. `npm run placeholders` prints a note about it; change it when a domain is connected (README → Deploy).
 
 ## Also check (copy, not placeholders)
 
@@ -26,9 +26,8 @@ These are in [`src/content/i18n/en.ts`](src/content/i18n/en.ts). Worth a last re
 - **Working with us**: two plans, one-time project and ongoing follow-up (monthly maintenance and support). No prices or terms on purpose.
 - **FAQ**: three short answers that promise nothing specific ("Depends on what it needs. We'll tell you honestly after a first chat.").
 - **What we build**: the five areas say what we *can* build. Remove any you don't want to be asked about yet.
-- **Privacy page**: correct as long as there are no analytics and the form stays in email-app mode. Update it if either changes. It says the site is run by WCNI Labs (no legal name yet) and that messages are kept "only as long as we need them to reply to you or to run your project". Add the responsible person or company once that's settled.
+- **Privacy page**: covers Vercel hosting, Vercel Web Analytics (cookieless) and the form; the form paragraph switches by itself between Web3Forms and email-app mode depending on `contact.web3formsKey`. The contact for data questions is the site email. Update it if hosting, analytics or the form service change.
 
 ## Optional switches in `site.ts`
 
-- `contact.formEndpoint` — leave empty (form opens the visitor's email app). Set to `/api/contact` only after a Cloudflare Pages Function exists (see TODO.md).
-- `cloudflareAnalyticsToken` — leave empty for no analytics. Cookieless Cloudflare Web Analytics loads only when set.
+- `vercelAnalytics` — `true` adds cookieless Vercel Web Analytics to builds made on Vercel (it also has to be enabled in the Vercel dashboard). `false` removes it; update the privacy page if you do.

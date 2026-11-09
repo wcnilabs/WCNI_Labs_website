@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 /**
  * Static export: `npm run build` writes plain HTML/CSS/JS to `out/`,
- * which Cloudflare Pages (or any static host) serves as-is.
+ * which Vercel (or any static host) serves as-is.
  */
 const nextConfig: NextConfig = {
   output: "export",

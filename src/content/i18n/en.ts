@@ -13,6 +13,7 @@
  * cutting-edge, innovative, leverage, empower, supercharge, next-level, solutions.
  */
 
+import { isFilled } from "@/lib/placeholders";
 import { site } from "../site";
 
 const L = "en" as const;
@@ -177,11 +178,11 @@ export const en = {
         year: "2026",
         title: "How we built our own site",
         summary:
-          "We designed and built this site from scratch in our own visual identity: one typeface, two colours and an orange slash. It's static, loads fast on a phone and has no tracking. The same care we bring to every project.",
+          "We designed and built this site from scratch in our own visual identity: one typeface, two colours and an orange slash. It's static, loads fast on a phone and uses no cookies. The same care we bring to every project.",
         facts: [
           { term: "Type", detail: "Studio website" },
           { term: "Stack", detail: "Next.js, React, plain CSS" },
-          { term: "Hosting", detail: "Cloudflare Pages" },
+          { term: "Hosting", detail: "Vercel" },
         ],
         linkLabel: "Read the code on GitHub",
         href: site.repoUrl,
@@ -274,10 +275,10 @@ export const en = {
 
   privacy: {
     metaTitle: "Privacy",
-    metaDescription: "How the WCNI Labs website handles your data: no cookies, no tracking, and only what you choose to send us.",
+    metaDescription: "How the WCNI Labs website handles your data: no cookies, no ads, anonymous visit counts, and only what you choose to send us.",
     label: "Privacy",
     title: "Privacy, in plain words.",
-    lead: "No cookies. No tracking. No ads. We only get what you choose to send us.",
+    lead: "No cookies. No ads. Anonymous visit counts, and only what you choose to send us.",
     updatedLabel: "Last updated",
     sections: [
       {
@@ -289,14 +290,14 @@ export const en = {
       {
         heading: "What this site collects",
         body: [
-          "Nothing by itself. We don't use cookies, analytics, tracking pixels or ads. Everything on the page, fonts included, is served from this site.",
-          "If we ever add visitor statistics, we'll use a cookieless tool and update this page first.",
+          "Anonymous visit counts, through Vercel Web Analytics: which pages are viewed, the site that sent you here, and your country, browser and type of device. It uses no cookies, doesn't identify you and doesn't follow you to other sites.",
+          "We don't use cookies, tracking pixels or ads. Everything on the page, fonts included, is served from this site.",
         ],
       },
       {
         heading: "Hosting",
         body: [
-          "The site is hosted on Cloudflare Pages. Like any web host, Cloudflare processes technical data such as your IP address to deliver pages and protect the site from attacks. You can read how in Cloudflare's privacy policy (cloudflare.com/privacypolicy).",
+          "The site is hosted on Vercel. Like any web host, Vercel processes technical data such as your IP address to deliver pages and protect the site from attacks. You can read how in Vercel's privacy policy (vercel.com/legal/privacy-policy).",
         ],
       },
       {
@@ -304,7 +305,9 @@ export const en = {
         body: [
           "If you email us or use the form, we receive what you send: usually your name, your business or project, a phone number or email address, and your message.",
           "We use it only to reply to you and, if we work together, to run your project. We don't sell it and we don't share it for marketing.",
-          "The form doesn't send anything through this website: it opens your own email app with the message filled in, and you decide whether to send it.",
+          isFilled(site.contact.web3formsKey)
+            ? "The form sends your message through Web3Forms, a service that forwards it to our email. Web3Forms processes it only to deliver it (web3forms.com/privacy)."
+            : "The form doesn't send anything through this website: it opens your own email app with the message filled in, and you decide whether to send it.",
         ],
       },
       {

@@ -26,7 +26,7 @@ async function* walk(dir) {
 const found = new Map(); // placeholder -> [locations]
 for (const dir of scanDirs) {
   for await (const file of walk(join(root, dir))) {
-    const rel = relative(root, file);
+    const rel = relative(root, file).replaceAll("\\", "/"); // Windows paths use "\"
     if (skipFiles.has(rel)) continue;
     const lines = (await readFile(file, "utf8")).split("\n");
     lines.forEach((line, i) => {
@@ -40,11 +40,13 @@ for (const dir of scanDirs) {
   }
 }
 
+// A free host address (*.vercel.app) is fine to launch on: a note, not a failure.
 const site = await readFile(join(root, "src/content/site.ts"), "utf8");
-const defaultUrl = site.includes('url: "https://wcnilabs.pages.dev"');
+const hostUrl = site.match(/url: "(https:\/\/[^"]+\.(?:vercel\.app|pages\.dev))"/)?.[1];
+const note = hostUrl ? `\nNote: site.url is the free host address ${hostUrl}. Change it when a domain is connected.\n` : "";
 
-if (found.size === 0 && !defaultUrl) {
-  console.log("No placeholders left. Ready to launch.");
+if (found.size === 0) {
+  console.log(`No placeholders left. Ready to launch.${note}`);
   process.exit(0);
 }
 
@@ -53,8 +55,6 @@ for (const [name, where] of [...found].sort()) {
   console.log(`  ${name}`);
   for (const location of where) console.log(`      ${location}`);
 }
-if (defaultUrl) {
-  console.log("\n  [SITE URL]  site.url is still the default https://wcnilabs.pages.dev (src/content/site.ts)");
-}
-console.log("\nFill them in src/content/site.ts. See PLACEHOLDERS.md for what each one means.\n");
+console.log("\nFill them in src/content/site.ts. See PLACEHOLDERS.md for what each one means.");
+console.log(note);
 process.exit(1);

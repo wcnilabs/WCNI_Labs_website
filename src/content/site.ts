@@ -70,10 +70,10 @@ export const site = {
 
   /**
    * Public address of the site. Used for canonical URLs, the sitemap and
-   * social previews. Change it when the real domain is connected.
-   * [SITE URL]
+   * social previews. For now the free Vercel address; change it when a
+   * custom domain is connected (see README → Deploy).
    */
-  url: "https://wcnilabs.pages.dev",
+  url: "https://wcnilabs.vercel.app",
 
   /** Where you are based. Shown in About and the footer. e.g. "Braga, Portugal" */
   basedIn: { en: "Porto, Portugal" } as Localized,
@@ -87,22 +87,23 @@ export const site = {
     replyTime: { en: "less than two days" } as Localized,
 
     /**
-     * Optional form endpoint. Leave empty and the form opens the visitor's
-     * email app with the message filled in (no service needed).
-     * Set to e.g. "/api/contact" once a Cloudflare Pages Function exists (see TODO.md).
+     * Web3Forms access key (web3forms.com). The form sends messages through
+     * Web3Forms, which forwards them to the inbox the key was created with.
+     * The key is public by design: it can only send to that inbox.
+     * While it's a placeholder, the form opens the visitor's email app instead.
      */
-    formEndpoint: "",
+    web3formsKey: "faa1f3c4-7c3c-4d7a-9f0f-0edf45981f3d",
   },
 
   /* --------------------------------------------------------------- Social */
   social: {
     instagram: { handle: "@wcnilabs", url: "https://www.instagram.com/wcnilabs/" },
     /** e.g. { handle: "wcnilabs", url: "https://github.com/wcnilabs" } */
-    github: { handle: "[GITHUB HANDLE]", url: "[GITHUB URL]" },
+    github: { handle: "wcnilabs", url: "https://github.com/wcnilabs" },
   },
 
-  /** Public repository of this website (case study #1). e.g. "https://github.com/wcnilabs/website" */
-  repoUrl: "[GITHUB REPO URL]",
+  /** Public repository of this website (case study #1). */
+  repoUrl: "https://github.com/wcnilabs/WCNI_Labs_website",
 
   /*
    * No prices, contract terms or timelines on the site for now (removed in
@@ -115,15 +116,17 @@ export const site = {
   /* ---------------------------------------------------------------- Legal */
   legal: {
     /** ISO date the privacy page was last changed. */
-    privacyUpdated: "2026-11-07",
+    privacyUpdated: "2026-11-09",
   },
 
   /* ------------------------------------------------------------ Analytics */
   /**
-   * Cloudflare Web Analytics token (cookieless). Empty = no analytics at all.
-   * Update the privacy page before turning it on.
+   * Vercel Web Analytics: cookieless, anonymous page-view counts. The script
+   * is only added to builds made on Vercel, and Analytics must also be
+   * enabled in the Vercel dashboard (Project → Analytics → Enable).
+   * Set to false to remove it (and update the privacy page).
    */
-  cloudflareAnalyticsToken: "",
+  vercelAnalytics: true,
 };
 
 export type Site = typeof site;

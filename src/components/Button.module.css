@@ -34,8 +34,10 @@
   color: var(--btn-fg);
 }
 
-.primary:hover:not(:disabled) {
-  background: var(--btn-bg-hover);
+@media (hover: hover) {
+  .primary:hover:not(:disabled) {
+    background: var(--btn-bg-hover);
+  }
 }
 
 /* Thin outline */
@@ -45,8 +47,10 @@
   border-color: var(--rule-strong);
 }
 
-.secondary:hover:not(:disabled) {
-  border-color: var(--fg);
+@media (hover: hover) {
+  .secondary:hover:not(:disabled) {
+    border-color: var(--fg);
+  }
 }
 
 /* Quiet underlined link that still has a 44px touch target */
@@ -66,27 +70,39 @@
   transition: text-decoration-color var(--dur) var(--ease);
 }
 
-.text:hover > span:first-child {
-  text-decoration-color: var(--fg);
-}
-
 .arrow {
   display: inline-block;
   font-weight: var(--weight-regular);
   transition: transform var(--dur) var(--ease);
 }
 
-.button:hover .arrow,
 .button:focus-visible .arrow {
   transform: translateX(3px);
 }
 
-.arrow-down:hover .arrow,
 .arrow-down:focus-visible .arrow {
   transform: translateY(3px);
 }
 
-.arrow-out:hover .arrow,
 .arrow-out:focus-visible .arrow {
   transform: translate(2px, -2px);
+}
+
+/* Hover states only with a mouse: on touch screens they'd stick after a tap */
+@media (hover: hover) {
+  .text:hover > span:first-child {
+    text-decoration-color: var(--fg);
+  }
+
+  .button:hover .arrow {
+    transform: translateX(3px);
+  }
+
+  .arrow-down:hover .arrow {
+    transform: translateY(3px);
+  }
+
+  .arrow-out:hover .arrow {
+    transform: translate(2px, -2px);
+  }
 }
